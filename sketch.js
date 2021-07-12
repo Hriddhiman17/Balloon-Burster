@@ -12,9 +12,9 @@ function preload() {
 
 function setup() {
     createCanvas(windowWidth, windowHeight)
-    bg = createSprite(windowWidth / 2, windowHeight / 2);
+    bg = createSprite(windowWidth / 2, windowHeight / 1000);
     bg.addImage(bgImg);
-    bg.scale = (windowWidth * windowHeight) / 127777;
+    bg.scale = (windowWidth * windowHeight) / 50000;
 
     arrow = createSprite(windowWidth - 40, 200, 50, 20);
     arrow.addImage(arrowImg);
@@ -35,17 +35,16 @@ function setup() {
 }
 
 function draw() {
-    background(0)
+    background(255)
 
     arrow.y = bow.y;
 
-    // scene.velocityX = -2;
+    bg.velocityX = -2;
     bow.y = World.mouseY;
 
-    // if (scene.x < 0) {
-    //     scene.x = 200;
-    //     scene.x = scene.width / 2;
-    // }
+    if (bg.x < 0) {
+        bg.x = windowWidth/2;
+    }
 
     if (keyDown("space")) {
         createArrows();
@@ -89,6 +88,9 @@ function draw() {
     if (greenBalloonGroup.isTouching(rightEdgeWall)) {
         greenBalloonGroup.destroyEach();
         Score = Score - 1;
+    }
+    if(mousePressedOver(bg)){
+        createArrows();
     }
     yellowB();
     blueB();
