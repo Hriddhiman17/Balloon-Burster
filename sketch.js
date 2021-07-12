@@ -106,8 +106,9 @@ function draw() {
     blueBalloonGroup.bounce(redBalloonGroup);
     greenBalloonGroup.bounce(redBalloonGroup);
 
+    textSize((windowWidth*windowHeight)/35156)
     text("Score : " + Score, 270, 30);
-
+    console.log((windowWidth*windowHeight)/35156)
     function createArrows() {
         var arrow = createSprite(windowWidth - 40, 100, 5, 10);
         arrow.addImage(arrowImg);
