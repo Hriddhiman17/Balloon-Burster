@@ -1,4 +1,4 @@
-var bg, bgImg, arrow, arrowImg, bow, bowImg, arrowsGroup, yellowBalloonGroup, blueBalloonGroup, greenBalloonGroup, redBalloonGroup, Score, yellowImg, blueImg, greenImg, redImg, rand;
+var bg, bgImg, arrow, arrowImg, bow, bowImg, arrowsGroup, yellowBalloonGroup, blueBalloonGroup, greenBalloonGroup, redBalloonGroup, Score, yellowImg, blueImg, greenImg, redImg, rand, rightEdgeWall, noOfArrow, leftEdgeWall;
 
 function preload() {
     bgImg = loadImage('./assets/sunshine_showers.png');
@@ -32,6 +32,12 @@ function setup() {
     Score = 0;
 
     rightEdgeWall = createSprite(windowWidth, windowHeight / 2, 5, windowHeight);
+    rightEdgeWall.visible = false;
+
+    noOfArrow = 0;
+
+    leftEdgeWall = createSprite(0, windowHeight / 2, 5, windowHeight);
+    leftEdgeWall.visible = false;
 }
 
 function draw() {
@@ -46,32 +52,40 @@ function draw() {
         bg.x = windowWidth/2;
     }
 
-    if (keyDown("space")) {
+    if (keyDown("space") && noOfArrow == 0) {
         createArrows();
     }
-
+    if(mousePressedOver(bg) && noOfArrow == 0){
+        createArrows();
+    }
+    
     if (arrowsGroup.isTouching(yellowBalloonGroup)) {
         yellowBalloonGroup.destroyEach();
         arrowsGroup.destroyEach();
         Score = Score + 1;
-
+        noOfArrow = 0;
     }
     if (arrowsGroup.isTouching(blueBalloonGroup)) {
         blueBalloonGroup.destroyEach();
         arrowsGroup.destroyEach();
         Score = Score + 1;
-
+        noOfArrow = 0;
     }
     if (arrowsGroup.isTouching(greenBalloonGroup)) {
         greenBalloonGroup.destroyEach();
         arrowsGroup.destroyEach();
         Score = Score + 1;
-
+        noOfArrow = 0;
     }
     if (arrowsGroup.isTouching(redBalloonGroup)) {
         redBalloonGroup.destroyEach();
         arrowsGroup.destroyEach();
         Score = Score + 1;
+        noOfArrow = 0;
+    }
+    if(arrowsGroup.isTouching(leftEdgeWall)){
+        arrowsGroup.destroyEach();
+        noOfArrow = 0;
     }
     if (redBalloonGroup.isTouching(rightEdgeWall)) {
         redBalloonGroup.destroyEach();
@@ -89,9 +103,6 @@ function draw() {
         greenBalloonGroup.destroyEach();
         Score = Score - 1;
     }
-    if(mousePressedOver(bg)){
-        createArrows();
-    }
     yellowB();
     blueB();
     greenB();
@@ -106,15 +117,17 @@ function draw() {
     blueBalloonGroup.bounce(redBalloonGroup);
     greenBalloonGroup.bounce(redBalloonGroup);
 
-    textSize((windowWidth*windowHeight)/35156)
+    textSize((windowWidth*windowHeight)/35156);
+    fill('black');
     text("Score : " + Score, 270, 30);
-    console.log((windowWidth*windowHeight)/35156)
+
     function createArrows() {
         var arrow = createSprite(windowWidth - 40, 100, 5, 10);
         arrow.addImage(arrowImg);
         arrow.velocityX = -6;
         arrow.y = bow.y;
         arrowsGroup.add(arrow);
+        noOfArrow = 1;
         return arrow;
     }
     function yellowB() {
