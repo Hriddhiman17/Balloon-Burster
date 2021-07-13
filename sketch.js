@@ -49,12 +49,13 @@ function draw() {
 
     if (lose == false) {
         bg.velocityX = -2;
-    }else{
+    } else {
         bg.velocityX = 0;
-        bg.x = windowWidth/2;
+        bg.x = windowWidth / 2;
     }
-
-    bow.y = World.mouseY;
+    if (lose == false) {
+        bow.y = World.mouseY;
+    }
 
     if (bg.x < 0 && lose == false) {
         bg.x = windowWidth / 2;
@@ -120,7 +121,7 @@ function draw() {
         blueB();
         greenB();
         redB();
-    }else{
+    } else {
         yellowBalloonGroup.destroyEach();
         redBalloonGroup.destroyEach();
         blueBalloonGroup.destroyEach();
@@ -142,7 +143,7 @@ function draw() {
     if (lose == true) {
         textSize(((windowWidth * windowHeight) / 17578));
         fill('black');
-        text("You Lose.", windowWidth/2, windowHeight/2);
+        text("You Lose.", windowWidth / 2, windowHeight / 2);
     }
     function createArrows() {
         var arrow = createSprite(windowWidth - 40, 100, 5, 10);
