@@ -1,18 +1,23 @@
-var bg, bgImg, arrow, arrowImg, bow, bowImg, arrowsGroup, yellowBalloonGroup, blueBalloonGroup, greenBalloonGroup, redBalloonGroup, Score, yellowImg, blueImg, greenImg, redImg, rand, rightEdgeWall, noOfArrow, leftEdgeWall, lose;
+var bg, bgImg, arrow, arrowImg, bow, bowImg, arrowsGroup, yellowBalloonGroup, blueBalloonGroup, greenBalloonGroup, redBalloonGroup, Score, yellowImg, blueImg, greenImg, redImg, rand, rightEdgeWall, noOfArrow, leftEdgeWall, lose, losingSound;
 
 function preload() {
-    bgImg = loadImage('./assets/sunshine_showers.png');
+    bgImg = loadImage();
     arrowImg = loadImage('./assets/arrow.png');
     bowImg = loadImage('./assets/bow.png');
     yellowImg = loadImage('./assets/yellow.png');
     blueImg = loadImage('./assets/blue.png');
     greenImg = loadImage('./assets/green.png');
     redImg = loadImage('./assets/red.png');
+
+    loseSnd = loadSound('./sounds/Lose.mp3');
+    winSnd = loadSound('./sounds/Win.mp3');
+    burstSnd = loadSound('./sounds/Burst.mp3');
+    hitSnd = loadSound('./sounds/Hit.mp3');
 }
 
 function setup() {
     createCanvas(windowWidth, windowHeight)
-    bg = createSprite(windowWidth / 2, windowHeight / 1000);
+    bg = createSprite(windowWidth / 2, windowHeight / 2);
     bg.addImage(bgImg);
     bg.scale = (windowWidth * windowHeight) / 50000;
 
@@ -40,6 +45,9 @@ function setup() {
     leftEdgeWall.visible = false;
 
     lose = false;
+
+    restartBtn = createSprite(windowWidth/2, windowHeight/2);
+    restartBtn.visible = false;
 }
 
 function draw() {
@@ -60,7 +68,6 @@ function draw() {
     if (bg.x < 0 && lose == false) {
         bg.x = windowWidth / 2;
     }
-
     if (keyDown("space") && noOfArrow == 0 && lose == false) {
         createArrows();
     }
@@ -77,24 +84,28 @@ function draw() {
         arrowsGroup.destroyEach();
         Score = Score + 1;
         noOfArrow = 0;
+        burstSnd.play();
     }
     if (arrowsGroup.isTouching(blueBalloonGroup)) {
         blueBalloonGroup.destroyEach();
         arrowsGroup.destroyEach();
         Score = Score + 1;
         noOfArrow = 0;
+        burstSnd.play();
     }
     if (arrowsGroup.isTouching(greenBalloonGroup)) {
         greenBalloonGroup.destroyEach();
         arrowsGroup.destroyEach();
         Score = Score + 1;
         noOfArrow = 0;
+        burstSnd.play();
     }
     if (arrowsGroup.isTouching(redBalloonGroup)) {
         redBalloonGroup.destroyEach();
         arrowsGroup.destroyEach();
         Score = Score + 1;
         noOfArrow = 0;
+        burstSnd.play();
     }
     if (arrowsGroup.isTouching(leftEdgeWall)) {
         arrowsGroup.destroyEach();
@@ -103,18 +114,22 @@ function draw() {
     if (redBalloonGroup.isTouching(rightEdgeWall)) {
         redBalloonGroup.destroyEach();
         Score = Score - 1;
+        hitSnd.play();
     }
     if (blueBalloonGroup.isTouching(rightEdgeWall)) {
         blueBalloonGroup.destroyEach();
         Score = Score - 1;
+        hitSnd.play();
     }
     if (yellowBalloonGroup.isTouching(rightEdgeWall)) {
         yellowBalloonGroup.destroyEach();
         Score = Score - 1;
+        hitSnd.play();
     }
     if (greenBalloonGroup.isTouching(rightEdgeWall)) {
         greenBalloonGroup.destroyEach();
         Score = Score - 1;
+        hitSnd.play();
     }
     if (lose == false) {
         yellowB();
@@ -126,8 +141,8 @@ function draw() {
         redBalloonGroup.destroyEach();
         blueBalloonGroup.destroyEach();
         greenBalloonGroup.destroyEach();
+        arrowsGroup.destroyEach();
     }
-    reset();
     drawSprites();
 
     yellowBalloonGroup.bounce(blueBalloonGroup);
@@ -140,10 +155,15 @@ function draw() {
     textSize((windowWidth * windowHeight) / 35156);
     fill('black');
     text("Score : " + Score, windowWidth / 1.25, 30);
+
     if (lose == true) {
         textSize(((windowWidth * windowHeight) / 17578));
         fill('black');
         text("You Lose.", windowWidth / 2, windowHeight / 2);
+        restartBtn.visible = true;
+        if(mousePressedOver(restartBtn)){
+            reset();
+        }
     }
     function createArrows() {
         var arrow = createSprite(windowWidth - 40, 100, 5, 10);
@@ -155,12 +175,12 @@ function draw() {
         return arrow;
     }
     function yellowB() {
-        if (World.frameCount % (windowWidth / 7) === 0) {
+        if (World.frameCount % (windowWidth / 8) === 0) {
             var yellowBalloon = createSprite(0, 0, 20, 20);
             yellowBalloon.addImage(yellowImg);
             yellowBalloon.scale = 0.8;
             yellowBalloon.velocityX = 6;
-            yellowBalloon.y = random(50, 350);
+            yellowBalloon.y = random(50, windowHeight - 50);
             yellowBalloonGroup.add(yellowBalloon);
             bow.depth = yellowBalloonGroup.depth;
             yellowBalloonGroup.depth = yellowBalloonGroup.depth - 1;
@@ -172,7 +192,7 @@ function draw() {
             blueBalloon.addImage(blueImg);
             blueBalloon.scale = 0.8;
             blueBalloon.velocityX = 6;
-            blueBalloon.y = random(50, 350);
+            blueBalloon.y = random(50, windowHeight - 50);
             blueBalloonGroup.add(blueBalloon);
             bow.depth = blueBalloonGroup.depth;
             blueBalloonGroup.depth = blueBalloonGroup.depth - 1;
@@ -185,7 +205,7 @@ function draw() {
             greenBalloon.addImage(greenImg);
             greenBalloon.scale = 0.8;
             greenBalloon.velocityX = 6;
-            greenBalloon.y = random(50, 350);
+            greenBalloon.y = random(50, windowHeight - 50);
             greenBalloonGroup.add(greenBalloon);
             bow.depth = greenBalloonGroup.depth;
             greenBalloonGroup.depth = greenBalloonGroup.depth + 1;
@@ -193,7 +213,7 @@ function draw() {
         }
     }
     function redB() {
-        if (World.frameCount % (windowWidth / 7) === 0) {
+        if (World.frameCount % (windowWidth / 8) === 0) {
             var redBalloon = createSprite();
             redBalloon.addImage(redImg);
             redBalloon.scale = 0.8;
@@ -207,8 +227,12 @@ function draw() {
     }
 }
 function reset() {
-    if (keyDown("r") || bow.x < 0) {
-        arrow.x = bow.x;
-        arrow.velocityX = 0;
-    }
+    lose = false;
+    Score = 0;
+    yellowBalloonGroup.destroyEach();
+    blueBalloonGroup.destroyEach();
+    redBalloonGroup.destroyEach();
+    greenBalloonGroup.destroyEach();
+    arrowsGroup.destroyEach();
+    restartBtn.visible = false;
 }
