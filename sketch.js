@@ -186,7 +186,7 @@ function draw() {
         }
     }
     function blueB() {
-        if (World.frameCount % (windowWidth / 7) === 0) {
+        if (World.frameCount % (windowWidth / 6) === 0) {
             var blueBalloon = createSprite(0, 0, 20, 20);
             blueBalloon.addImage(blueImg);
             blueBalloon.scale = 0.8;
@@ -199,7 +199,7 @@ function draw() {
         }
     }
     function greenB() {
-        if (World.frameCount % (windowWidth / 7) === 0) {
+        if (World.frameCount % (windowWidth / 8) === 0) {
             var greenBalloon = createSprite(0, 0, 20, 20);
             greenBalloon.addImage(greenImg);
             greenBalloon.scale = 0.8;
