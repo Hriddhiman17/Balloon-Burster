@@ -1,7 +1,7 @@
 var bg, bgImg, arrow, arrowImg, bow, bowImg, arrowsGroup, yellowBalloonGroup, blueBalloonGroup, greenBalloonGroup, redBalloonGroup, Score, yellowImg, blueImg, greenImg, redImg, rand, rightEdgeWall, noOfArrow, leftEdgeWall, lose, losingSound;
 
 function preload() {
-    bgImg = loadImage();
+    bgImg = loadImage('./assets/sunshine_showers.png');
     arrowImg = loadImage('./assets/arrow.png');
     bowImg = loadImage('./assets/bow.png');
     yellowImg = loadImage('./assets/yellow.png');
@@ -17,9 +17,9 @@ function preload() {
 
 function setup() {
     createCanvas(windowWidth, windowHeight)
-    bg = createSprite(windowWidth / 2, windowHeight / 2);
+    bg = createSprite(windowWidth / 2, windowHeight / 5);
     bg.addImage(bgImg);
-    bg.scale = (windowWidth * windowHeight) / 50000;
+    bg.scale = (windowWidth * windowHeight) / 75000;
 
     arrow = createSprite(windowWidth - 40, 200, 50, 20);
     arrow.addImage(arrowImg);
@@ -54,24 +54,23 @@ function draw() {
     background(255)
 
     arrow.y = bow.y;
-
-    if (lose == false) {
-        bg.velocityX = -2;
-    } else {
-        bg.velocityX = 0;
-        bg.x = windowWidth / 2;
-    }
+    // if (lose == false) {
+    //     bg.velocityX = -2;
+    // } else {
+    //     bg.velocityX = 0;
+    //     bg.x = windowWidth / 2;
+    // }
     if (lose == false) {
         bow.y = World.mouseY;
     }
 
-    if (bg.x < 0 && lose == false) {
-        bg.x = windowWidth / 2;
-    }
-    if (keyDown("space") && noOfArrow == 0 && lose == false) {
+    // if (bg.x < 40 && lose == false) {
+    //     bg.x = windowWidth / 2;
+    // }
+    if (keyDown("space") && noOfArrow < 3 && lose == false) {
         createArrows();
     }
-    if (mousePressedOver(bg) && noOfArrow == 0 && lose == false) {
+    if (mousePressedOver(bg) && noOfArrow < 3 && lose == false) {
         createArrows();
     }
 
@@ -83,28 +82,28 @@ function draw() {
         yellowBalloonGroup.destroyEach();
         arrowsGroup.destroyEach();
         Score = Score + 1;
-        noOfArrow = 0;
+        noOfArrow = noOfArrow-1;
         burstSnd.play();
     }
     if (arrowsGroup.isTouching(blueBalloonGroup)) {
         blueBalloonGroup.destroyEach();
         arrowsGroup.destroyEach();
         Score = Score + 1;
-        noOfArrow = 0;
+        noOfArrow = noOfArrow-1;
         burstSnd.play();
     }
     if (arrowsGroup.isTouching(greenBalloonGroup)) {
         greenBalloonGroup.destroyEach();
         arrowsGroup.destroyEach();
         Score = Score + 1;
-        noOfArrow = 0;
+        noOfArrow = noOfArrow-1;
         burstSnd.play();
     }
     if (arrowsGroup.isTouching(redBalloonGroup)) {
         redBalloonGroup.destroyEach();
         arrowsGroup.destroyEach();
         Score = Score + 1;
-        noOfArrow = 0;
+        noOfArrow = noOfArrow-1;
         burstSnd.play();
     }
     if (arrowsGroup.isTouching(leftEdgeWall)) {
@@ -171,11 +170,11 @@ function draw() {
         arrow.velocityX = -6;
         arrow.y = bow.y;
         arrowsGroup.add(arrow);
-        noOfArrow = 1;
+        noOfArrow = noOfArrow+1;
         return arrow;
     }
     function yellowB() {
-        if (World.frameCount % (windowWidth / 8) === 0) {
+        if (World.frameCount % (windowWidth / 7) === 0) {
             var yellowBalloon = createSprite(0, 0, 20, 20);
             yellowBalloon.addImage(yellowImg);
             yellowBalloon.scale = 0.8;
@@ -187,7 +186,7 @@ function draw() {
         }
     }
     function blueB() {
-        if (World.frameCount % (windowWidth / 8) === 0) {
+        if (World.frameCount % (windowWidth / 7) === 0) {
             var blueBalloon = createSprite(0, 0, 20, 20);
             blueBalloon.addImage(blueImg);
             blueBalloon.scale = 0.8;
@@ -200,7 +199,7 @@ function draw() {
         }
     }
     function greenB() {
-        if (World.frameCount % (windowWidth / 8) === 0) {
+        if (World.frameCount % (windowWidth / 7) === 0) {
             var greenBalloon = createSprite(0, 0, 20, 20);
             greenBalloon.addImage(greenImg);
             greenBalloon.scale = 0.8;
@@ -213,7 +212,7 @@ function draw() {
         }
     }
     function redB() {
-        if (World.frameCount % (windowWidth / 8) === 0) {
+        if (World.frameCount % (windowWidth / 7) === 0) {
             var redBalloon = createSprite();
             redBalloon.addImage(redImg);
             redBalloon.scale = 0.8;
